@@ -13,7 +13,7 @@ const CheckboxGroup = <T extends string>({
 }: CheckboxGroupProps<T>) => (
     <div>
         {options.map((option) => (
-            <label key={option} style={{ marginRight: 12 }}>
+            <label key={option} className='checkbox-label'>
                 <input
                     type='checkbox'
                     checked={selected.includes(option)}

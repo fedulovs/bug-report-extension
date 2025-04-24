@@ -1,7 +1,62 @@
 .container {
+    background: var(--background-color-dark);
+    color: var(--color-dark);
     display: flex;
     flex-direction: column;
     padding: 16px;
     width: 350px;
-    padding: 16px;
+    min-height: 300px;
+    box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: light) {
+    .container {
+        background: var(--background-color-light);
+        color: var(--color-light);
+    }
+}
+
+.tabbar {
+    display: flex;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    font-weight: normal;
+    font-size: 1rem;
+    transition: border-bottom 0.2s, font-weight 0.2s;
+}
+
+.tab-btn.active {
+    font-weight: bold;
+}
+
+.copy-button {
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: var(--primary-button-bg-dark);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+
+.copy-button:focus,
+.copy-button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 12px;
+    white-space: nowrap;
 }

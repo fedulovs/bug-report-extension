@@ -3,11 +3,18 @@ import CheckboxGroup from './CheckboxGroup';
 import ReproRateRadioGroup from './ReproRateRadioGroup';
 import TextInputGroup from './TextInput';
 import './App.css';
+import CopyButton from './CopyButton';
+import {
+    tabs,
+    Tab,
+    environmentsList,
+    reproducedInList,
+    siteOptions,
+    browserOptions,
+    platformOptions,
+} from './constants';
 
-const environmentsList = ['Development', 'Staging', 'Production'] as const;
-const reproducedInList = ['Dev', 'Live', 'RC'] as const;
-
-const App = () => {
+const QAContent = () => {
     const [reproRate, setReproRate] = useState('4/4');
     const [environments, setEnvironments] = useState<
         (typeof environmentsList)[number][]
@@ -16,7 +23,6 @@ const App = () => {
         (typeof reproducedInList)[number][]
     >([]);
     const [build, setBuild] = useState<string[]>([]);
-
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -84,6 +90,90 @@ ${build[0] || ''}
             <button className='copy-button' onClick={handleCopy}>
                 {copied ? '👍' : 'Copy'}
             </button>
+        </div>
+    );
+};
+
+const DevContent = () => {
+    const [selectedSites, setSelectedSites] = useState<
+        (typeof siteOptions)[number][]
+    >([]);
+    const [selectedBrowsers, setSelectedBrowsers] = useState<
+        (typeof browserOptions)[number][]
+    >([]);
+    const [selectedPlatforms, setSelectedPlatforms] = useState<
+        (typeof platformOptions)[number][]
+    >([]);
+
+    const devTemplate = `
+**For QA**
+**Branch:**
+**Site:** ${
+        selectedSites.length > 0 ? selectedSites.join(' | ') : '(none selected)'
+    }
+**Browsers:** ${
+        selectedBrowsers.length > 0
+            ? selectedBrowsers.join(' | ')
+            : '(none selected)'
+    }
+**Platforms:** ${
+        selectedPlatforms.length > 0
+            ? selectedPlatforms.join(' | ')
+            : '(none selected)'
+    }
+**URL:** Any specific?
+Instructions, screenshots, videos
+`.trim();
+
+    return (
+        <div className='container'>
+            <h2>QA Instructions</h2>
+            <h3>Site:</h3>
+            <CheckboxGroup
+                options={siteOptions}
+                selected={selectedSites}
+                onChange={setSelectedSites}
+            />
+
+            <h3>Browsers:</h3>
+            <CheckboxGroup
+                options={browserOptions}
+                selected={selectedBrowsers}
+                onChange={setSelectedBrowsers}
+            />
+
+            <h3>Platforms:</h3>
+            <CheckboxGroup
+                options={platformOptions}
+                selected={selectedPlatforms}
+                onChange={setSelectedPlatforms}
+            />
+
+            <CopyButton template={devTemplate} className='copy-button' />
+        </div>
+    );
+};
+
+const App = () => {
+    const [activeTab, setActiveTab] = useState<Tab>('QA');
+
+    return (
+        <div>
+            <div className='tabbar'>
+                {tabs.map((tab) => (
+                    <button
+                        key={tab}
+                        className={`tab-btn${
+                            activeTab === tab ? ' active' : ''
+                        }`}
+                        onClick={() => setActiveTab(tab)}
+                    >
+                        {tab}
+                    </button>
+                ))}
+            </div>
+            {activeTab === 'QA' && <QAContent />}
+            {activeTab === 'Dev' && <DevContent />}
         </div>
     );
 };
